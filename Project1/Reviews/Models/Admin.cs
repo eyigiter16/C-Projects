@@ -1,9 +1,11 @@
-﻿namespace Reviews.Models
+﻿using System;
+
+namespace Reviews.Models
 {
     public class Admin
     {
-        public int id { get; set; }
-        public string userName { get; set; }
-        public string password { get; set; }
+        public Guid Id { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
     }
 }

@@ -1,13 +1,15 @@
-﻿namespace Reviews.Models
+﻿using System;
+
+namespace Reviews.Models
 {
     public class Review
     {
-        public int id { get; set; }
-        public string content { get; set; }
-        public string title { get; set; }
-        public string star { get; set; }
-        public string status { get; set; }
-        public string rejectReason { get; set; }
-        public int operatedBy { get; set; }
+        public Guid Id { get; set; }
+        public string Content { get; set; }
+        public string Title { get; set; }
+        public string Star { get; set; }
+        public string Status { get; set; }
+        public string RejectReason { get; set; }
+        public Guid OperatedBy { get; set; }
     }
 }
