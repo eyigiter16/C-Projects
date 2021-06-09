@@ -12,24 +12,28 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("For User Login type: 1\n" +
-                                  "For Registration type: 2\n" +
-                                  "To show reviews type: 3\n" +
-                                  "For Admin Login type: 4\n" +
-                                  "To exit type: 5");
+                Console.WriteLine("\nFor User Login                               : 1\n" +
+                                  "For Registration                             : 2\n" +
+                                  "To show reviews                              : 3\n" +
+                                  "For Admin Login                              : 4\n" +
+                                  "To exit                                      : 5");
                 var choice = Convert.ToInt32(Console.ReadLine());
+                Console.Clear();
 
                 switch (choice)
                 {
                     case 1:
                         var id = Login(users);
+                        var mistakeCounter = 0;
                         while (id != null)
                         {
-                            Console.WriteLine("To see the reviews type: reviews" +
-                                              "\nTo change a review type: change" +
-                                              "\nTo create new review type: new" +
-                                              "\nTo logout and return bak to main menu type: exit");
+                            Console.WriteLine("\nTo see the reviews                           : reviews\n" +
+                                              "To change a review                           : change\n" +
+                                              "To create new review                         : new\n" +
+                                              "To logout and return back to main menu       : exit");
                             var userChoice = Console.ReadLine().ToLower();
+                            Console.Clear();
+                            
                             if (string.Equals(userChoice, "reviews"))
                             {
                                 ReadUserReview(reviews, id);
@@ -46,7 +50,41 @@ namespace Reviews.Controller
                             {
                                 id = null;
                             }
-                            
+                            else
+                            {
+                                mistakeCounter++;
+                                if (mistakeCounter==2)
+                                {
+                                    
+                                    Console.WriteLine("\nInvalid input again! \n" +
+                                                      "Returning back to main menu. ");
+                                    id = null;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nInvalid input! \n" +
+                                                      "If you give another wrong input you \n" +
+                                                      "will be sent back to main menu. \n" +
+                                                      "To logout and return back to main menu       : exit \n" +
+                                                      "To make a new choice                         : continue ");
+                                    var mistakeChoice = Console.ReadLine().ToLower();
+                                    Console.Clear();
+                                    
+                                    if (string.Equals(mistakeChoice, "exit"))
+                                    {
+                                        
+                                        Console.WriteLine("\nReturning back to main menu. ");
+                                        id = null;
+                                    }
+                                    else if (!string.Equals(mistakeChoice, "continue"))
+                                    {
+                                        
+                                        Console.WriteLine("\nInvalid input again! \n" +
+                                                          "Returning back to main menu. ");
+                                        id = null;
+                                    }
+                                }
+                            }
                         }
                         break;
                     case 2:
@@ -56,12 +94,16 @@ namespace Reviews.Controller
                         ReadAllReview(reviews);
                         break;
                     case 4:
-                        while (LoginAdmin(admins) == 1)
+                        var checkAdmin = LoginAdmin(admins);
+                        var mistakeCounter1 = 0;
+                        while (checkAdmin == 1)
                         {
-                            Console.WriteLine("To see the reviews type: reviews" +
-                                              "\nTo change status of reviews type: change" +
-                                              "\nTo logout and return back to main menu type: exit");
+                            Console.WriteLine("\nTo see the reviews                           : reviews\n" +
+                                              "To change status of reviews                  : change\n" +
+                                              "To logout and return back to main menu       : exit");
                             var adminChoice = Console.ReadLine().ToLower();
+                            Console.Clear();
+                            
                             if (string.Equals(adminChoice, "reviews"))
                             {
                                 ReadAdminByStatus(reviews);
@@ -72,15 +114,63 @@ namespace Reviews.Controller
                             }
                             else if (string.Equals(adminChoice, "exit"))
                             {
-                                break;
+                                checkAdmin = 0;
+                            }
+                            else
+                            {
+                                mistakeCounter1++;
+                                if (mistakeCounter1==2)
+                                {
+                                    
+                                    Console.WriteLine("\nInvalid input again! \n" +
+                                                      "Returning back to main menu. ");
+                                    checkAdmin = 0;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nInvalid input! \n" +
+                                                      "If you give another wrong input you \n" +
+                                                      "will be sent back to main menu. \n" +
+                                                      "To logout and return back to main menu       : exit \n" +
+                                                      "To make a new choice                         : continue ");
+                                    var mistakeChoice = Console.ReadLine().ToLower();
+                                    Console.Clear();
+                                    
+                                    if (string.Equals(mistakeChoice, "exit"))
+                                    {
+                                        
+                                        Console.WriteLine("\nReturning back to main menu. ");
+                                        checkAdmin = 0;
+                                    }
+                                    else if (!string.Equals(mistakeChoice, "continue"))
+                                    {
+                                        
+                                        Console.WriteLine("\nInvalid input again! \n" +
+                                                          "Returning back to main menu. ");
+                                        checkAdmin = 0;
+                                    }
+                                }
                             }
                         }
                         break;
                     case 5:
+                        
+                        Console.WriteLine("\nExiting. ");
                         looper = false;
                         break;
                     default:
-                        Console.WriteLine("Invalid input!");
+                        Console.WriteLine("\nInvalid input! \n" +
+                                          "To logout and return back to main menu       : exit \n" +
+                                          "To make a new choice                         : (whatever else) ");
+                        var again = Console.ReadLine().ToLower();
+                        Console.Clear();
+                        
+                        if (string.Equals(again, "exit"))
+                        {
+                            
+                            Console.WriteLine("\nExiting. "); 
+                            looper = false;
+                        }
                         break;
                 }
             }
@@ -89,10 +179,12 @@ namespace Reviews.Controller
 
         public string Login(List<User> users)
         {
-            Console.WriteLine("Please enter your E-mail:");
+            Console.WriteLine("\nPlease enter your E-mail: ");
             var e = Console.ReadLine();
-            Console.WriteLine("Please enter your Password:");
+            Console.WriteLine("\nPlease enter your Password: ");
             var p = Console.ReadLine();
+            Console.Clear();
+            
             foreach (var user in users)
             {
                 if (string.Equals(user.Email, e) )
@@ -103,11 +195,13 @@ namespace Reviews.Controller
                     }
                     else
                     {
-                        Console.WriteLine("Wrong Password!");
+                        
+                        Console.WriteLine("\nWrong Password! ");
                     }
                 }
             }
-            Console.WriteLine("Invalid user login attempt!\nReturning to main menu.");
+            
+            Console.WriteLine("\nInvalid user login attempt! \nReturning to main menu. ");
             return null;
         }
 
@@ -116,24 +210,26 @@ namespace Reviews.Controller
             var id = Guid.NewGuid();
             var user = new User();
             user.Id = id;
-            Console.WriteLine("Please enter your first name:");
+            Console.WriteLine("\nPlease enter your first name: ");
             user.FirstName = Console.ReadLine();
-            Console.WriteLine("Please enter your last name:");
+            Console.WriteLine("\nPlease enter your last name: ");
             user.LastName = Console.ReadLine();
-            Console.WriteLine("Please enter your email:");
+            Console.WriteLine("\nPlease enter your email: ");
             user.Email = Console.ReadLine();
-            Console.WriteLine("Please enter your password:");
+            Console.WriteLine("\nPlease enter your password: ");
             user.Password = Console.ReadLine();
             users.Add(user);
-
+            Console.Clear();
         }
 
         public int LoginAdmin(List<Admin> admins)
         {
-            Console.WriteLine("Please enter your User Name:");
+            Console.WriteLine("\nPlease enter your User Name:");
             var u = Console.ReadLine();
-            Console.WriteLine("Please enter your Password:");
+            Console.WriteLine("\nPlease enter your Password:");
             var p = Console.ReadLine();
+            Console.Clear();
+            
             foreach (var admin in admins)
             {
                 if (string.Equals(admin.UserName, u) )
@@ -144,11 +240,12 @@ namespace Reviews.Controller
                     }
                     else
                     {
-                        Console.WriteLine("Wrong Password!");
+                        Console.WriteLine("\nWrong Password! ");
                     }
                 }
             }
-            Console.WriteLine("Invalid admin login attempt!\n Returning to main menu.");
+            
+            Console.WriteLine("\nInvalid admin login attempt!\n Returning to main menu.");
             return 0;
         }
 
@@ -170,10 +267,11 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("To show reviews type: reviews" +
-                                  "\nTo return back type: back");
+                Console.WriteLine("\nTo show reviews                              : reviews \n" +
+                                  "\nTo return back                               : back ");
                 var choice = Console.ReadLine().ToLower();
-                
+                Console.Clear();
+
                 if (string.Equals(choice, "back"))
                 {
                     looper = false;
@@ -184,8 +282,8 @@ namespace Reviews.Controller
                     {
                         if (string.Equals(Convert.ToString(review.OperatedBy), id))
                         {
-                            Console.WriteLine("ID: "+ Convert.ToString(review.Id)+"Title: " + review.Title + "|| Content: " + review.Content + "|| Star: " +
-                                              review.Star + "|| Status: " + review.Status + "|| Operated by: " + review.OperatedBy);
+                            Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " || Content: " + review.Content + " || Star: " +
+                                              review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
                         }
                     }
                 }
@@ -197,9 +295,10 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("To show reviews type: reviews" +
-                                  "\nTo return back type: back");
+                Console.WriteLine("\nTo show reviews                              : reviews \n" +
+                                  "\nTo return back                             : back");
                 var choice = Console.ReadLine().ToLower();
+                Console.Clear();
                 
                 if (string.Equals(choice, "back"))
                 {
@@ -211,8 +310,8 @@ namespace Reviews.Controller
                     {
                         if (String.Equals(review.Status, "approved"))
                         {
-                            Console.WriteLine("ID: "+ Convert.ToString(review.Id)+"Title: " + review.Title + "|| Content: " + review.Content + "|| Star: " +
-                                              review.Star + "|| Status: " + review.Status + "|| Operated by: " + review.OperatedBy);
+                            Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " || Content: " + review.Content + " || Star: " +
+                                              review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
                         }
                     }
                 }
@@ -224,16 +323,24 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("To show approved or pending or rejected or all to the whole word: " +
-                                  "\nTo return back type back: ");
+                Console.WriteLine("\nTo show approved                             : approved \n" +
+                                  "To show pending                              : pending \n" +
+                                  "To show rejected                             : rejected \n" +
+                                  "To show all                                  : all \n" +
+                                  "To return back                               : back ");
                 var choice = Console.ReadLine().ToLower();
+                Console.Clear();
                 
                 if (string.Equals(choice, "all"))
                 {
                     foreach (var review in reviews)
                     {
-                        Console.WriteLine("ID: "+ Convert.ToString(review.Id)+"Title: " + review.Title + "|| Content: " + review.Content + "|| Star: " +
-                                          review.Star + "|| Status: " + review.Status + "|| Operated by: " + review.OperatedBy);
+                        Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " || Content: " + review.Content + " || Star: " +
+                                          review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
+                        if (string.Equals(review.Status.ToLower(), "rejected"))
+                        {
+                            Console.WriteLine("Reject Reason: " + review.RejectReason);
+                        }
                     }
                 }
                 else if (string.Equals(choice, "back"))
@@ -246,8 +353,8 @@ namespace Reviews.Controller
                     {
                         if (String.Equals(review.Status, choice))
                         {
-                            Console.WriteLine("ID: "+ Convert.ToString(review.Id)+"Title: " + review.Title + "|| Content: " + review.Content + "|| Star: " +
-                                              review.Star + "|| Status: " + review.Status + "|| Operated by: " + review.OperatedBy);
+                            Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " | Content: " + review.Content + " || Star: " +
+                                              review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
                         }
                     }
                 }
@@ -256,74 +363,117 @@ namespace Reviews.Controller
 
         public void ChangeStatus(List<Review>  reviews)
         {
-            Console.WriteLine("Please enter the title of the review:");
+            Console.WriteLine("\nPlease enter the title of the review:");
             var idRejected = Console.ReadLine();
+            Console.Clear();
+            
             foreach (var review in reviews)
             {
                 if (string.Equals(idRejected, review.Title))
                 {
-                    Console.WriteLine("ID: "+ idRejected +"\nTitle: " + review.Title + "\nContent: " + review.Content + "\nStar: " +
+                    Console.WriteLine("\nID: "+ review.Id +"\nTitle: " + review.Title + "\nContent: " + review.Content + "\nStar: " +
                                       review.Star + "\nStatus: " + review.Status + "\nOperated by: " + review.OperatedBy);
                     if (string.Equals(review.Status.ToLower(), "rejected"))
                     {
                         Console.WriteLine("Reject Reason: " + review.RejectReason);
                     }
-                    Console.WriteLine("Enter new status:");
+                    Console.WriteLine("\nEnter new status:");
                     var newStat = Console.ReadLine();
-                    Console.WriteLine("Enter reject reason (empty if not rejected):");
+                    Console.WriteLine("\nEnter reject reason (empty if not rejected):");
                     var rejectReason = Console.ReadLine();
                     review.Status = newStat;
                     review.RejectReason = rejectReason;
+                    Console.Clear();
                 }
             }
         }
 
         public void ChangeReview(List<Review>  reviews, string id)
         {
-            Console.WriteLine("Please enter the Title of the review:");
+            Console.WriteLine("\nPlease enter the Title of the review:");
             var idChange = Console.ReadLine();
+            Console.Clear();
+            
             foreach (var review in reviews)
             {
                 if (string.Equals(idChange, review.Title))
                 {
                     if (string.Equals(Convert.ToString(review.OperatedBy), id))
                     {
-                        Console.WriteLine("ID: "+ idChange +"\nTitle: " + review.Title + "\nContent: " + review.Content + "\nStar: " +
+                        Console.WriteLine("\nID: "+ review.Id +"\nTitle: " + review.Title + "\nContent: " + review.Content + "\nStar: " +
                                           review.Star + "\nStatus: " + review.Status + "\nOperated by: " + review.OperatedBy);
                         if (string.Equals(review.Status.ToLower(), "rejected"))
                         {
                             Console.WriteLine("Reject Reason: " + review.RejectReason);
                         }
-                        Console.WriteLine("Enter new Title:");
-                        var newTitle = Console.ReadLine();
-                        Console.WriteLine("Enter new Content:");
-                        var newContent = Console.ReadLine();
-                        Console.WriteLine("Enter new Star:");
-                        var newStar = Console.ReadLine();
-                        review.Title = newTitle;
-                        review.Content = newContent;
-                        review.Star = newStar;
-                        review.Status = "pending";
-                        review.RejectReason = null;
+
+                        var exitLoop = false;
+                        var changesDone = false;
+                        while (!exitLoop)
+                        {
+                            Console.WriteLine("\nTo change the Title                          : 1 \n" +
+                                              "To change the Content                        : 2 \n" +
+                                              "To change the Star                           : 3 \n" +
+                                              "To save the changes and exit                 : 4 ");
+                            var choiceReview = Convert.ToInt32(Console.ReadLine());
+                            Console.Clear();
+                            
+                            switch (choiceReview)
+                            {
+                                case 1:
+                                    Console.WriteLine("\nEnter new Title:");
+                                    var newTitle = Console.ReadLine();
+                                    review.Title = newTitle;
+                                    changesDone = true;
+                                    Console.Clear();
+                                    break;
+                                case 2:
+                                    Console.WriteLine("\nEnter new Content:");
+                                    var newContent = Console.ReadLine();
+                                    review.Content = newContent;
+                                    changesDone = true;
+                                    Console.Clear();
+                                    break;
+                                case 3 :
+                                    Console.WriteLine("\nEnter new Star:");
+                                    var newStar = Convert.ToInt32(Console.ReadLine());
+                                    review.Star = newStar;
+                                    changesDone = true;
+                                    Console.Clear();
+                                    break;
+                                
+                                case 4:
+                                    exitLoop = true;
+                                    break;
+                            }
+
+                            if (changesDone)
+                            {
+                                review.Status = "pending";
+                                review.RejectReason = null;
+                            }
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("This comment does not belong to you");
+                        Console.WriteLine("\nThis comment does not belong to you");
                     }
-                    
                 }
             }
         }
 
         public void CreateReview(List<Review>  reviews, string id)
         {
-            Console.WriteLine("Enter new Title:"); 
+            
+            var reviewId = new Guid();
+            Console.WriteLine("\nEnter new Title:"); 
             var newTitle = Console.ReadLine(); 
-            Console.WriteLine("Enter new Content:"); 
+            Console.WriteLine("\nEnter new Content:"); 
             var newContent = Console.ReadLine(); 
-            Console.WriteLine("Enter new Star:"); 
-            var newStar = Console.ReadLine();
+            Console.WriteLine("\nEnter new Star:"); 
+            var newStar = Convert.ToInt32(Console.ReadLine());
             var review = new Review();
+            review.Id = reviewId;
             review.Title = newTitle; 
             review.Content = newContent; 
             review.Star = newStar; 
@@ -331,6 +481,7 @@ namespace Reviews.Controller
             review.OperatedBy = new Guid(id); 
             review.RejectReason = null;
             reviews.Add(review);
+            Console.Clear();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Reviews.ReadWrite
                     string ln;
                     while ((ln = file.ReadLine()) != null)
                     {
-                        var tokens = ln.Split(' ');
+                        var tokens = ln.Split('|');
                         var user = new User();
                         user.Id = new Guid(tokens[0]);
                         user.FirstName = tokens[1];
@@ -28,6 +28,7 @@ namespace Reviews.ReadWrite
                     }
 
                     file.Close();
+                    File.Delete("users.txt");
                 }
             }
         }
@@ -46,49 +47,34 @@ namespace Reviews.ReadWrite
                         review.Id = new Guid(tokens[0]);
                         review.Content = tokens[1];
                         review.Title = tokens[2];
-                        review.Star = tokens[3];
+                        review.Star = Convert.ToInt32(tokens[3]);
                         review.Status = tokens[4];
                         review.RejectReason = tokens[5];
                         review.OperatedBy = new Guid(tokens[6]);
                         reviews.Add(review);
                     }
-
                     file.Close();
+                    File.Delete("reviews.txt");
                 }
             }
         }
         
         public void Write(List<User> users, List<Review> reviews)
         {
-            if (File.Exists("users.txt"))    
-            {    
-                File.Delete("users.txt");    
-            }
-            File.Create("users.txt");
+            using StreamWriter file1 = new("users.txt");
             foreach (var currentUser in users)
-            {
-                using(StreamWriter writetext = new StreamWriter("users.txt"))
-                {
-                    writetext.WriteLine(Convert.ToString(currentUser.Id)+" "+ currentUser.FirstName +" "+
-                                        currentUser.LastName +" "+ currentUser.Email+
+            { 
+                file1.WriteLineAsync(Convert.ToString(currentUser.Id) + "|" + currentUser.FirstName 
+                                          + "|" + currentUser.LastName + "|" + currentUser.Email + "|" +
                                         currentUser.Password);
-                }
             }
-            if (File.Exists("reviews.txt"))    
-            {    
-                File.Delete("reviews.txt");    
-            }
-
-            File.Create("reviews.txt");
+            using StreamWriter file2 = new("reviews.txt");
             foreach (var currentReview in reviews)
             {
-                using(StreamWriter writetext = new StreamWriter("reviews.txt"))
-                {
-                    writetext.WriteLine(Convert.ToString(currentReview.Id) +"|"+ currentReview.Content +"|"+
-                                        currentReview.Title +"|"+ currentReview.Star +"|"+
-                                        currentReview.Status +"|"+ currentReview.RejectReason
-                                        +"|"+ currentReview.OperatedBy);
-                }
+                file2.WriteLineAsync(Convert.ToString(currentReview.Id) +"|"+ currentReview.Content +"|"+
+                                           currentReview.Title +"|"+ currentReview.Star +"|"+
+                                           currentReview.Status +"|"+ currentReview.RejectReason
+                                           +"|"+ currentReview.OperatedBy);
             }
         }
     }
