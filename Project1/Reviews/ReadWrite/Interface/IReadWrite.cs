@@ -9,6 +9,7 @@ namespace Reviews.ReadWrite.Interface
     {
         void ReadUser(List<User> users);
         void ReadReviews(List<Review> reviews);
-        void Write(List<User> users, List<Review> reviews);
+        void WriteUser(List<User> users);
+        void WriteReview(List<Review> reviews);
     }
 }

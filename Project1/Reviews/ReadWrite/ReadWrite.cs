@@ -28,7 +28,6 @@ namespace Reviews.ReadWrite
                     }
 
                     file.Close();
-                    File.Delete("users.txt");
                 }
             }
         }
@@ -54,13 +53,13 @@ namespace Reviews.ReadWrite
                         reviews.Add(review);
                     }
                     file.Close();
-                    File.Delete("reviews.txt");
                 }
             }
         }
         
-        public void Write(List<User> users, List<Review> reviews)
+        public void WriteUser(List<User> users)
         {
+            File.Delete("users.txt");
             using StreamWriter file1 = new("users.txt");
             foreach (var currentUser in users)
             { 
@@ -68,13 +67,18 @@ namespace Reviews.ReadWrite
                                           + "|" + currentUser.LastName + "|" + currentUser.Email + "|" +
                                         currentUser.Password);
             }
-            using StreamWriter file2 = new("reviews.txt");
+        }
+        
+        public void WriteReview(List<Review> reviews)
+        {
+            File.Delete("reviews.txt");
+            using StreamWriter file1 = new("reviews.txt");
             foreach (var currentReview in reviews)
             {
-                file2.WriteLineAsync(Convert.ToString(currentReview.Id) +"|"+ currentReview.Content +"|"+
-                                           currentReview.Title +"|"+ currentReview.Star +"|"+
-                                           currentReview.Status +"|"+ currentReview.RejectReason
-                                           +"|"+ currentReview.OperatedBy);
+                file1.WriteLineAsync(Convert.ToString(currentReview.Id) +"|"+ currentReview.Content +"|"+
+                                     currentReview.Title +"|"+ currentReview.Star +"|"+
+                                     currentReview.Status +"|"+ currentReview.RejectReason
+                                     +"|"+ currentReview.OperatedBy);
             }
         }
     }

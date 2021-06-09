@@ -12,10 +12,10 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("\nFor User Login                               : 1\n" +
-                                  "For Registration                             : 2\n" +
+                Console.WriteLine("\nTo User Login                                : 1\n" +
+                                  "To Registration                              : 2\n" +
                                   "To show reviews                              : 3\n" +
-                                  "For Admin Login                              : 4\n" +
+                                  "To Admin Login                               : 4\n" +
                                   "To exit                                      : 5");
                 var choice = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
@@ -161,7 +161,7 @@ namespace Reviews.Controller
                     default:
                         Console.WriteLine("\nInvalid input! \n" +
                                           "To logout and return back to main menu       : exit \n" +
-                                          "To make a new choice                         : (whatever else) ");
+                                          "To make a new choice                         : (just enter) ");
                         var again = Console.ReadLine().ToLower();
                         Console.Clear();
                         
@@ -220,6 +220,7 @@ namespace Reviews.Controller
             user.Password = Console.ReadLine();
             users.Add(user);
             Console.Clear();
+            new ReadWrite.ReadWrite().WriteUser(users);
         }
 
         public int LoginAdmin(List<Admin> admins)
@@ -267,7 +268,7 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("\nTo show reviews                              : reviews \n" +
+                Console.WriteLine("\nTo show reviews                              : reviews " +
                                   "\nTo return back                               : back ");
                 var choice = Console.ReadLine().ToLower();
                 Console.Clear();
@@ -295,8 +296,8 @@ namespace Reviews.Controller
             var looper = true;
             while (looper)
             {
-                Console.WriteLine("\nTo show reviews                              : reviews \n" +
-                                  "\nTo return back                             : back");
+                Console.WriteLine("\nTo show reviews                              : reviews " +
+                                  "\nTo return back                               : back ");
                 var choice = Console.ReadLine().ToLower();
                 Console.Clear();
                 
@@ -384,6 +385,7 @@ namespace Reviews.Controller
                     review.Status = newStat;
                     review.RejectReason = rejectReason;
                     Console.Clear();
+                    new ReadWrite.ReadWrite().WriteReview(reviews);
                 }
             }
         }
@@ -445,12 +447,27 @@ namespace Reviews.Controller
                                 case 4:
                                     exitLoop = true;
                                     break;
+                                default:
+                                    Console.WriteLine("\nInvalid input! \n" +
+                                                      "To logout and return back to main menu       : exit \n" +
+                                                      "To make a new choice                         : (just enter) ");
+                                    var again = Console.ReadLine().ToLower();
+                                    Console.Clear();
+                        
+                                    if (string.Equals(again, "exit"))
+                                    {
+                            
+                                        Console.WriteLine("\nExiting. "); 
+                                        exitLoop = true;
+                                    }
+                                    break;
                             }
 
                             if (changesDone)
                             {
                                 review.Status = "pending";
                                 review.RejectReason = null;
+                                new ReadWrite.ReadWrite().WriteReview(reviews);
                             }
                         }
                     }
@@ -465,7 +482,7 @@ namespace Reviews.Controller
         public void CreateReview(List<Review>  reviews, string id)
         {
             
-            var reviewId = new Guid();
+            var reviewId = Guid.NewGuid();
             Console.WriteLine("\nEnter new Title:"); 
             var newTitle = Console.ReadLine(); 
             Console.WriteLine("\nEnter new Content:"); 
@@ -482,6 +499,7 @@ namespace Reviews.Controller
             review.RejectReason = null;
             reviews.Add(review);
             Console.Clear();
+            new ReadWrite.ReadWrite().WriteReview(reviews);
         }
     }
 }

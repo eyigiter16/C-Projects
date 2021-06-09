@@ -14,7 +14,6 @@ namespace Reviews
             new ReadWrite.ReadWrite().ReadReviews(reviews);
             new Controller.Controller().CreateAdmin(admins);
             new Controller.Controller().Observer(admins, users, reviews);
-            new ReadWrite.ReadWrite().Write(users, reviews);
         }
     }
 }
