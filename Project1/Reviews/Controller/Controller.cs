@@ -107,7 +107,7 @@ namespace Reviews.Controller
                     }
                 }
             }
-            Console.WriteLine("Invalid user login attempt!\n Returning to main menu.");
+            Console.WriteLine("Invalid user login attempt!\nReturning to main menu.");
             return null;
         }
 

@@ -10,41 +10,51 @@ namespace Reviews.ReadWrite
     {
         public void ReadUser(List<User> users)
         {
-            using(var file = new StreamReader("users.txt"))
+            if (File.Exists("users.txt"))
             {
-                string ln;
-                while ((ln = file.ReadLine()) != null) {  
-                    var tokens = ln.Split(' ');
-                    var user = new User();
-                    user.Id = new Guid(tokens[0]);
-                    user.FirstName = tokens[1];
-                    user.LastName = tokens[2];
-                    user.Email = tokens[3];
-                    user.Password = tokens[4];
-                    users.Add(user);
-                }  
-                file.Close();
+                using (var file = new StreamReader("users.txt"))
+                {
+                    string ln;
+                    while ((ln = file.ReadLine()) != null)
+                    {
+                        var tokens = ln.Split(' ');
+                        var user = new User();
+                        user.Id = new Guid(tokens[0]);
+                        user.FirstName = tokens[1];
+                        user.LastName = tokens[2];
+                        user.Email = tokens[3];
+                        user.Password = tokens[4];
+                        users.Add(user);
+                    }
+
+                    file.Close();
+                }
             }
         }
 
         public void ReadReviews(List<Review> reviews)
         {
-            using(var file = new StreamReader("reviews.txt"))
+            if (File.Exists("reviews.txt"))
             {
-                string ln;
-                while ((ln = file.ReadLine()) != null) {  
-                    var tokens = ln.Split('|');
-                    var review = new Review();
-                    review.Id = new Guid(tokens[0]);
-                    review.Content = tokens[1];
-                    review.Title = tokens[2];
-                    review.Star = tokens[3];
-                    review.Status = tokens[4];
-                    review.RejectReason = tokens[5];
-                    review.OperatedBy = new Guid(tokens[6]);
-                    reviews.Add(review);
-                }  
-                file.Close();
+                using (var file = new StreamReader("reviews.txt"))
+                {
+                    string ln;
+                    while ((ln = file.ReadLine()) != null)
+                    {
+                        var tokens = ln.Split('|');
+                        var review = new Review();
+                        review.Id = new Guid(tokens[0]);
+                        review.Content = tokens[1];
+                        review.Title = tokens[2];
+                        review.Star = tokens[3];
+                        review.Status = tokens[4];
+                        review.RejectReason = tokens[5];
+                        review.OperatedBy = new Guid(tokens[6]);
+                        reviews.Add(review);
+                    }
+
+                    file.Close();
+                }
             }
         }
         

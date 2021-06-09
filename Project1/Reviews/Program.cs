@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Reviews.ReadWrite;
+﻿using System.Collections.Generic;
 using Reviews.Models;
 
 namespace Reviews
@@ -13,7 +11,7 @@ namespace Reviews
             var reviews = new List<Review>();
             var admins = new List<Admin>();
             new ReadWrite.ReadWrite().ReadUser(users);
-            new ReadWrite.ReadWrite().ReadReviws(reviews);
+            new ReadWrite.ReadWrite().ReadReviews(reviews);
             new Controller.Controller().CreateAdmin(admins);
             new Controller.Controller().Observer(admins, users, reviews);
             new ReadWrite.ReadWrite().Write(users, reviews);
