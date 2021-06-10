@@ -3,9 +3,9 @@ using Reviews.Models;
 
 namespace Reviews
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var users = new List<User>();
             var reviews = new List<Review>();
