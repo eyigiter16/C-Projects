@@ -185,7 +185,7 @@ namespace Reviews.Controller
             
             foreach (var user in users.Where(user => string.Equals(user.Email, e)))
             {
-                if (string.Equals(user.Password, p))
+                if (BCrypt.Net.BCrypt.Verify(p, user.Password))
                 {
                     return Convert.ToString(user.Id);
                 }
@@ -233,6 +233,7 @@ namespace Reviews.Controller
 
                 break;
             }
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             users.Add(user);
             Console.Clear();
             new ReadWrite.ReadWrite().WriteUser(users);

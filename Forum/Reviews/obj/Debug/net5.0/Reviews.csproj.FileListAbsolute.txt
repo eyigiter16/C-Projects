@@ -14,3 +14,17 @@ C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\obj\Debug\net5.0\Reviews.dll
 C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\obj\Debug\net5.0\ref\Reviews.dll
 C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\obj\Debug\net5.0\Reviews.pdb
 C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\obj\Debug\net5.0\Reviews.genruntimeconfig.cache
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\BCrypt.Net.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\DnsClient.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\MongoDB.Bson.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\MongoDB.Driver.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\MongoDB.Driver.Core.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\MongoDB.Libmongocrypt.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\SharpCompress.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\win\native\libzstd.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\win\native\snappy32.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\win\native\snappy64.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\linux\native\libmongocrypt.so
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\osx\native\libmongocrypt.dylib
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\bin\Debug\net5.0\runtimes\win\native\mongocrypt.dll
+C:\Users\ekrem\Desktop\RiderProjects\Forum\Reviews\obj\Debug\net5.0\Reviews.csproj.CopyComplete

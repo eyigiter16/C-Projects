@@ -78,8 +78,4 @@ namespace Reviews.ReadWrite
             }
         }
     }
-
-    public class BCrypt
-    {
-    }
 }
