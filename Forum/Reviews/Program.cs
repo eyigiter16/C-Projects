@@ -22,7 +22,7 @@ namespace Reviews
             var admins = new List<Admin>();
             new UserDatabase.UserDatabase(repositoryUser).ReadUser(users);
             new ReviewDatabase.ReviewDatabase(repositoryReview).ReadReviews(reviews);
-            new Controller.Controller().CreateAdmin(admins);
+            new AdminOperations.AdminOperations().CreateAdmin(admins);
             new Controller.Controller().Observer(admins, users, reviews, repositoryUser, repositoryReview);
         }
     }
