@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using MongoDB.Driver;
 using Reviews.Models;
 using Reviews.Mongo;
@@ -10,7 +11,8 @@ namespace Reviews
     {
         private static void Main()
         {
-            var client = new MongoClient("mongodb+srv://ekrem:eko1234@cluster0.byr3l.mongodb.net/Forum?retryWrites=true&w=majority");
+            var mongo = new StreamReader("mongo.txt").ReadLine();
+            var client = new MongoClient(mongo);
             var context1 = new Context<User>(client, "Forum");
             var context2 = new Context<Review>(client, "Forum");
             var repositoryUser = new Repository<User>(context1, "Users");
