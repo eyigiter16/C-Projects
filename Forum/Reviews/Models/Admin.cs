@@ -2,9 +2,8 @@
 
 namespace Reviews.Models
 {
-    public class Admin
+    public class Admin : Document
     {
-        public Guid Id { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
     }

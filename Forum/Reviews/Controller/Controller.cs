@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Reviews.Controller.Interface;
 using Reviews.Models;
+using Reviews.Mongo;
 
 namespace Reviews.Controller
 {
     public class Controller : IController
     {
-        public void Observer(List<Admin> admins, List<User>  users, List<Review>  reviews)
+        public void Observer(List<Admin> admins, List<User>  users, List<Review>  reviews, Repository<User> repositoryUser, Repository<Review> repositoryReview)
         {
             var looper = true;
             while (looper)
@@ -39,11 +40,11 @@ namespace Reviews.Controller
                             }
                             else if (string.Equals(userChoice, "2"))
                             {
-                                ChangeReview(reviews, id);
+                                ChangeReview(reviews, id, repositoryReview);
                             }
                             else if (string.Equals(userChoice, "3"))
                             {
-                                CreateReview(reviews, id);
+                                CreateReview(reviews, id, repositoryReview);
                             }
                             else if (string.Equals(userChoice, "4"))
                             {
@@ -87,7 +88,7 @@ namespace Reviews.Controller
                 }
                 else if (string.Equals(choice, "2"))
                 { 
-                    Register(users);
+                    Register(users, repositoryUser);
                 }
                 else if (string.Equals(choice, "3"))
                 {
@@ -111,7 +112,7 @@ namespace Reviews.Controller
                         }
                         else if (string.Equals(adminChoice, "2"))
                         {
-                            ChangeStatus(reviews);
+                            ChangeStatus(reviews, repositoryReview);
                         }
                         else if (string.Equals(adminChoice, "3"))
                         {
@@ -196,7 +197,7 @@ namespace Reviews.Controller
             return null;
         }
 
-        public void Register(List<User> users)
+        public void Register(List<User> users, Repository<User> repositoryUser)
         {
             var id = Guid.NewGuid();
             var user = new User {Id = id};
@@ -223,7 +224,7 @@ namespace Reviews.Controller
             user.Password = Console.ReadLine();
             while (true)
             {
-                if (user.Password.Length < 8)
+                if (user.Password?.Length < 8)
                 {
                     Console.WriteLine("Password must be at least8 characters." +
                                       "\nPlease provide a new password.");
@@ -236,10 +237,10 @@ namespace Reviews.Controller
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             users.Add(user);
             Console.Clear();
-            new ReadWrite.ReadWrite().WriteUser(users);
+            new UserDatabase.UserDatabase(repositoryUser).WriteUser(user);
         }
 
-        public int LoginAdmin(List<Admin> admins)
+        public int LoginAdmin(IEnumerable<Admin> admins)
         {
             Console.WriteLine("\nPlease enter your User Name:");
             var u = Console.ReadLine();
@@ -420,7 +421,7 @@ namespace Reviews.Controller
             }
         }
 
-        public void ChangeStatus(List<Review>  reviews)
+        public void ChangeStatus(List<Review>  reviews, Repository<Review> repositoryReview)
         {
             Console.WriteLine("\nPlease enter the title of the review:");
             var idRejected = Console.ReadLine();
@@ -465,11 +466,11 @@ namespace Reviews.Controller
                 }
                 review.Status = newStat;
                 Console.Clear();
-                new ReadWrite.ReadWrite().WriteReview(reviews);
+                new ReviewDatabase.ReviewDatabase(repositoryReview).UpdateReview(review);
             }
         }
 
-        public void ChangeReview(List<Review>  reviews, string id)
+        public void ChangeReview(List<Review>  reviews, string id, Repository<Review> repositoryReview)
         {
             while (true)
             {
@@ -569,7 +570,7 @@ namespace Reviews.Controller
                             if (!changesDone) continue;
                             review.Status = "pending";
                             review.RejectReason = null;
-                            new ReadWrite.ReadWrite().WriteReview(reviews);
+                            new ReviewDatabase.ReviewDatabase(repositoryReview).UpdateReview(review);
                         }
                     }
                     else
@@ -593,7 +594,7 @@ namespace Reviews.Controller
             }
         }
 
-        public void CreateReview(List<Review>  reviews, string id)
+        public void CreateReview(List<Review>  reviews, string id, Repository<Review> repositoryReview)
         {
             
             var reviewId = Guid.NewGuid();
@@ -632,7 +633,7 @@ namespace Reviews.Controller
             };
             reviews.Add(review);
             Console.Clear();
-            new ReadWrite.ReadWrite().WriteReview(reviews);
+            new ReviewDatabase.ReviewDatabase(repositoryReview).WriteReview(review);
         }
     }
 }

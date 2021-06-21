@@ -1,10 +1,7 @@
-﻿using System;
-
-namespace Reviews.Models
+﻿namespace Reviews.Models
 {
-    public class User
+    public class User : Document
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; } 
         public string LastName { get; set; } 
         public string Email { get; set; } 

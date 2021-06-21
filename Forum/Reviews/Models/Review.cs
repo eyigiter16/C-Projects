@@ -2,9 +2,8 @@
 
 namespace Reviews.Models
 {
-    public class Review
+    public class Review : Document
     {
-        public Guid Id { get; set; }
         public string Content { get; set; }
         public string Title { get; set; }
         public int Star { get; set; }
