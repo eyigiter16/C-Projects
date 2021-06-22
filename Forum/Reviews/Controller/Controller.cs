@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Reviews.Controller.Interface;
 using Reviews.Models;
 using Reviews.Mongo;
+using Reviews.Service.AdminService;
+using Reviews.Service.ReviewService;
+using Reviews.Service.UserService;
 
 namespace Reviews.Controller
 {
@@ -10,9 +13,9 @@ namespace Reviews.Controller
     {
         public void Observer(List<Admin> admins, List<User>  users, List<Review>  reviews, Repository<User> repositoryUser, Repository<Review> repositoryReview)
         {
-            var revOps = new ReviewOperations.ReviewOperations();
-            var userOps = new UserOperations.UserOperations();
-            var adminOps = new AdminOperations.AdminOperations();
+            var revOps = new ReviewService();
+            var userOps = new UserService();
+            var adminOps = new AdminService();
             var looper = true;
             while (looper)
             {

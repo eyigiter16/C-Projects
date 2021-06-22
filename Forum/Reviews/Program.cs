@@ -4,6 +4,8 @@ using MongoDB.Driver;
 using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Mongo.Context;
+using Reviews.Repository;
+using Reviews.Service.AdminService;
 
 namespace Reviews
 {
@@ -20,9 +22,9 @@ namespace Reviews
             var users = new List<User>();
             var reviews = new List<Review>();
             var admins = new List<Admin>();
-            new UserDatabase.UserDatabase(repositoryUser).ReadUser(users);
-            new ReviewDatabase.ReviewDatabase(repositoryReview).ReadReviews(reviews);
-            new AdminOperations.AdminOperations().CreateAdmin(admins);
+            new UserRepository(repositoryUser).ReadUser(users);
+            new ReviewRepository(repositoryReview).ReadReviews(reviews);
+            new AdminService().CreateAdmin(admins);
             new Controller.Controller().Observer(admins, users, reviews, repositoryUser, repositoryReview);
         }
     }
