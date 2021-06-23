@@ -18,8 +18,6 @@
         {
             Code = 4001;
             Message = "\nInvalid input! \n" +
-                      "If you give another invalid input you \n" +
-                      "will be sent back to main menu. \n" +
                       "To logout and return back to main menu       : 1 \n" +
                       "To make a new choice                         : 2 ";
         }

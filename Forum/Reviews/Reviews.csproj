@@ -8,6 +8,7 @@
     <ItemGroup>
       <PackageReference Include="BCrypt.Net" Version="0.1.0" />
       <PackageReference Include="MongoDB.Driver" Version="2.12.4" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     </ItemGroup>
 
 </Project>

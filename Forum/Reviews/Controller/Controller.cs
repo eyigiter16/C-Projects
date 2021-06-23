@@ -57,24 +57,14 @@ namespace Reviews.Controller
                         else
                         {
                             Console.WriteLine("\nInvalid input! \n" +
-                                              "If you give another invalid input you \n" + 
-                                              "will be sent back to main menu. \n" +
-                                              "To logout and return back to main menu       : 1 \n" +
-                                              "To make a new choice                         : 2 ");
+                                              "To make a new choice                         : 1 \n" +
+                                              "To logout and return back to main menu       : (any) ");
                             var mistakeChoice = Console.ReadLine()?.ToLower();
                             Console.Clear();
                                     
-                            if (string.Equals(mistakeChoice, "1"))
-                            {
-                                Console.WriteLine("\nReturning back to main menu. ");
-                                id = null;
-                            }
-                            else if (!string.Equals(mistakeChoice, "2"))
-                            {
-                                Console.WriteLine("\nInvalid input again! \n" +
-                                                  "Returning back to main menu. ");
-                                id = null;
-                            }
+                            if (string.Equals(mistakeChoice, "1")) continue;
+                            Console.WriteLine("Returning back to main menu. ");
+                            id = null;
                         }
                     }
                 }
@@ -89,7 +79,6 @@ namespace Reviews.Controller
                 else if (string.Equals(choice, "4"))
                 {
                     var checkAdmin = adminOps.LoginAdmin(admins);
-                    var mistakeCounter1 = 0;
                     while (checkAdmin == 1)
                     {
                         Console.WriteLine("\nTo see the reviews                           : 1\n" +
@@ -112,38 +101,15 @@ namespace Reviews.Controller
                         }
                         else
                         {
-                            mistakeCounter1++;
-                            if (mistakeCounter1 == 2)
-                            {
+                            Console.WriteLine("\nInvalid input! \n" +
+                                              "To make a new choice                         : 1 \n" +
+                                              "To logout and return back to main menu       : (any) ");
+                            var mistakeChoice = Console.ReadLine()?.ToLower();
+                            Console.Clear();
 
-                                Console.WriteLine("\nInvalid input again! \n" +
-                                                  "Returning back to main menu. ");
-                                checkAdmin = 0;
-                            }
-                            else
-                            {
-                                Console.WriteLine("\nInvalid input! \n" +
-                                                  "If you give another invalid input you \n" +
-                                                  "will be sent back to main menu. \n" +
-                                                  "To logout and return back to main menu       : 1 \n" +
-                                                  "To make a new choice                         : 2 ");
-                                var mistakeChoice = Console.ReadLine()?.ToLower();
-                                Console.Clear();
-
-                                if (string.Equals(mistakeChoice, "1"))
-                                {
-
-                                    Console.WriteLine("\nReturning back to main menu. ");
-                                    checkAdmin = 0;
-                                }
-                                else if (!string.Equals(mistakeChoice, "2"))
-                                {
-
-                                    Console.WriteLine("\nInvalid input again! \n" +
-                                                      "Returning back to main menu. ");
-                                    checkAdmin = 0;
-                                }
-                            }
+                            if (string.Equals(mistakeChoice, "1")) continue;
+                            Console.WriteLine("\nReturning back to main menu. ");
+                            checkAdmin = 0;
                         }
                     }
                 }
@@ -155,8 +121,8 @@ namespace Reviews.Controller
                 else
                 {
                     Console.WriteLine("\nInvalid input! \n" +
-                                      "To exit                                      : 1 \n" +
-                                      "To make a new choice                         : (just enter) ");
+                                      "To make a new choice                         : 1 \n" +
+                                      "To exit                                      : (any) ");
                     var again = Console.ReadLine()?.ToLower();
                     Console.Clear();
 
