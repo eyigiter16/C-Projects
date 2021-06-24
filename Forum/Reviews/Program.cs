@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.IO;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using Newtonsoft.Json.Linq;
 using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Mongo.Context;
@@ -14,8 +13,8 @@ namespace Reviews
     {
         private static void Main()
         {
-            var mongo = JObject.Parse(File.ReadAllText(@"C:\Users\ekrem\Desktop\RiderProjects\mongoPath.json"));
-            var client = new MongoClient(mongo.Value<string>("path"));
+            var mongo = Configuration.Load();
+            var client = new MongoClient(mongo.GetConnectionString("path"));
             var context1 = new Context<User>(client, "Forum");
             var context2 = new Context<Review>(client, "Forum");
             var repositoryUser = new Repository<User>(context1, "Users");

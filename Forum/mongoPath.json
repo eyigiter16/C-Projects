@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "path" : "mongodb+srv://ekrem:eko1234@cluster0.byr3l.mongodb.net/Forum?retryWrites=true&w=majority"
+  }
+}

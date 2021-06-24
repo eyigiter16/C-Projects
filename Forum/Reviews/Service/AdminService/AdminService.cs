@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Reviews.Exception;
 using Reviews.Models;
 using Reviews.Service.AdminService.Interface;
 
@@ -34,9 +35,23 @@ namespace Reviews.Service.AdminService
                 {
                     return 1;
                 }
-                Console.WriteLine("\nWrong Password! ");
+                try
+                {
+                    throw new InvalidPassword();
+                }
+                catch (InvalidPassword e)
+                {
+                    Console.WriteLine(e.Code+e.Message);
+                }
             }
-            Console.WriteLine("\nInvalid admin login attempt! \nReturning to main menu. ");
+            try
+            {
+                throw new InvalidLogin();
+            }
+            catch (InvalidLogin e)
+            {
+                Console.WriteLine(e.Code+e.Message);
+            }
             return 0;
         }
 

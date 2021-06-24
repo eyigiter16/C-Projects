@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Reviews.Exception;
 using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Repository;
@@ -14,8 +15,8 @@ namespace Reviews.Service.UserService
         {
             Console.WriteLine("\nTo return back                                   : 1 " +
                               "\nPlease enter your E-mail: ");
-            var e = Console.ReadLine();
-            if (string.Equals(e, "1"))
+            var c = Console.ReadLine();
+            if (string.Equals(c, "1"))
             {
                 Console.Clear();
                 Console.WriteLine("\nTo return back                               : 1 " +
@@ -31,7 +32,7 @@ namespace Reviews.Service.UserService
                 return null;
             }
             
-            foreach (var user in users.Where(user => string.Equals(user.Email, e)))
+            foreach (var user in users.Where(user => string.Equals(user.Email, c)))
             {
                 if (BCrypt.Net.BCrypt.Verify(p, user.Password))
                 {
@@ -39,8 +40,14 @@ namespace Reviews.Service.UserService
                 }
                 Console.WriteLine("\nWrong Password! ");
             }
-            
-            Console.WriteLine("\nInvalid user login attempt! \nReturning to main menu. ");
+            try
+            {
+                throw new InvalidLogin();
+            }
+            catch (InvalidLogin e)
+            {
+                Console.WriteLine(e.Code+e.Message);
+            }
             return null;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Reviews.Controller.Interface;
+using Reviews.Exception;
 using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Service.AdminService;
@@ -56,9 +57,14 @@ namespace Reviews.Controller
                         }
                         else
                         {
-                            Console.WriteLine("\nInvalid input! \n" +
-                                              "To make a new choice                         : 1 \n" +
-                                              "To logout and return back to main menu       : (any) ");
+                            try
+                            {
+                                throw new InvalidInput();
+                            }
+                            catch (InvalidInput e)
+                            {
+                                Console.WriteLine(e.Code+e.Message);
+                            }
                             var mistakeChoice = Console.ReadLine()?.ToLower();
                             Console.Clear();
                                     
@@ -101,9 +107,14 @@ namespace Reviews.Controller
                         }
                         else
                         {
-                            Console.WriteLine("\nInvalid input! \n" +
-                                              "To make a new choice                         : 1 \n" +
-                                              "To logout and return back to main menu       : (any) ");
+                            try
+                            {
+                                throw new InvalidInput();
+                            }
+                            catch (InvalidInput e)
+                            {
+                                Console.WriteLine(e.Code+e.Message);
+                            }
                             var mistakeChoice = Console.ReadLine()?.ToLower();
                             Console.Clear();
 
@@ -120,13 +131,18 @@ namespace Reviews.Controller
                 }
                 else
                 {
-                    Console.WriteLine("\nInvalid input! \n" +
-                                      "To make a new choice                         : 1 \n" +
-                                      "To exit                                      : (any) ");
+                    try
+                    {
+                        throw new InvalidMenu();
+                    }
+                    catch (InvalidMenu e)
+                    {
+                        Console.WriteLine(e.Code+e.Message);
+                    }
                     var again = Console.ReadLine()?.ToLower();
                     Console.Clear();
-
-                    if (!string.Equals(again, "1")) continue;
+                    
+                    if (string.Equals(again, "1")) continue;
                     Console.WriteLine("\nExiting. ");
                     looper = false;
                 }

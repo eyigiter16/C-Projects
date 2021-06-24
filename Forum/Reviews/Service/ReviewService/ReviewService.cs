@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Reviews.Exception;
 using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Repository;
@@ -71,7 +72,20 @@ namespace Reviews.Service.ReviewService
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input! \n");
+                    try
+                    {
+                        throw new InvalidUserInput();
+                    }
+                    catch (InvalidUserInput e)
+                    {
+                        Console.WriteLine(e.Code+e.Message);
+                    }
+                    var mistakeChoice = Console.ReadLine()?.ToLower();
+                    Console.Clear();
+
+                    if (string.Equals(mistakeChoice, "1")) continue;
+                    Console.WriteLine("\nReturning back to user menu. ");
+                    looper = false;
                 }
             }
         }
@@ -180,7 +194,20 @@ namespace Reviews.Service.ReviewService
                 }
                 else
                 {
-                    Console.WriteLine("Invalid input! \n");
+                    try
+                    {
+                        throw new InvalidAdminInput();
+                    }
+                    catch (InvalidAdminInput e)
+                    {
+                        Console.WriteLine(e.Code+e.Message);
+                    }
+                    var mistakeChoice = Console.ReadLine()?.ToLower();
+                    Console.Clear();
+
+                    if (string.Equals(mistakeChoice, "1")) continue;
+                    Console.WriteLine("\nReturning back to admin menu. ");
+                    looper = false;
                 }
             }
         }
@@ -359,9 +386,14 @@ namespace Reviews.Service.ReviewService
                             }
                             else
                             {
-                                Console.WriteLine("\nInvalid input! \n" +
-                                                  "To logout and return back to main menu       : 1 \n" +
-                                                  "To make a new choice                         : (just enter) ");
+                                try
+                                {
+                                    throw new InvalidInput();
+                                }
+                                catch (InvalidInput e)
+                                {
+                                    Console.WriteLine(e.Code+e.Message);
+                                }
                                 var again = Console.ReadLine()?.ToLower();
                                 Console.Clear();
 
@@ -387,9 +419,14 @@ namespace Reviews.Service.ReviewService
 
                 if (inLoop == false)
                 {
-                    Console.WriteLine("\nInvalid input! \n" +
-                                      "To logout and return back to main menu       : 1 \n" +
-                                      "To give a new input                          : (just enter) ");
+                    try
+                    {
+                        throw new InvalidInput();
+                    }
+                    catch (InvalidInput e)
+                    {
+                        Console.WriteLine(e.Code+e.Message);
+                    }
                     var again = Console.ReadLine()?.ToLower();
                     Console.Clear();
 
