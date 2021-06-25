@@ -6,12 +6,14 @@ using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Repository;
 using Reviews.Service.UserService.Interface;
+using Reviews.Validation;
 
 namespace Reviews.Service.UserService
 {
     public class UserService : IUserService
     {
-         public string Login(IEnumerable<User> users)
+        private UserValidator _validator;
+        public string Login(IEnumerable<User> users)
         {
             Console.WriteLine("\nTo return back                                   : 1 " +
                               "\nPlease enter your E-mail: ");
@@ -55,52 +57,54 @@ namespace Reviews.Service.UserService
         {
             var id = Guid.NewGuid();
             var user = new User {Id = id};
-            Console.WriteLine("\nPlease enter your first name: ");
-            user.FirstName = Console.ReadLine();
-            Console.WriteLine("\nPlease enter your last name: ");
-            user.LastName = Console.ReadLine();
-            Console.WriteLine("\nPlease enter your email: ");
-            user.Email = Console.ReadLine();
-            var matches = users.Where(user1 => string.Equals(user1.Email, user.Email));
             while(true)
             {
-                if (!matches.Any())
+                _validator = new UserValidator();
+                Console.WriteLine("\nPlease enter your first name: ");
+                user.FirstName = Console.ReadLine();
+                Console.WriteLine("\nPlease enter your last name: ");
+                user.LastName = Console.ReadLine();
+                Console.WriteLine("\nPlease enter your email: ");
+                user.Email = Console.ReadLine();
+                while (true)
+                {
+                    if (!users.Any(user1 => string.Equals(user1.Email, user.Email)))
+                    {
+                        break;
+                    }
+                    Console.WriteLine("This email is already on the use by another user." +
+                                      "\nPlease provide a new email.");
+                    Console.WriteLine("\nPlease enter your email: ");
+                    user.Email = Console.ReadLine();
+                }
+                
+                Console.WriteLine("\nPlease enter your password: (8 to 24 characters)");
+                user.Password = Console.ReadLine();
+                Console.Clear();
+                var validate = _validator.Validate(user);
+                if (validate.IsValid)
                 {
                     break;
                 }
-                Console.WriteLine("This email is already on the use by another user." +
-                                  "\nPlease provide a new email.");
-                Console.WriteLine("\nPlease enter your email: ");
-                user.Email = Console.ReadLine();
-                matches = users.Where(user1 => string.Equals(user1.Email, user.Email));
-            }
-            Console.WriteLine("\nPlease enter your password: (Must be min 8 characters)");
-            user.Password = Console.ReadLine();
-            while (true)
-            {
-                if (string.Equals(user.Password, "1"))
+                Console.WriteLine(validate);
+                try
                 {
-                    Console.Clear();
-                    Console.WriteLine("\nReturning to main menu. ");
-                    return;
+                    throw new InvalidRegister();
                 }
-                if (user.Password?.Length < 8)
+                catch (InvalidRegister e)
                 {
-                    Console.WriteLine("Password must be at least8 characters." +
-                                      "\nPlease provide a new password.");
-                    Console.WriteLine("\nPlease enter your password: (Must be min 8 characters)");
-                    user.Password = Console.ReadLine();
+                    Console.WriteLine(e.Code+e.Message);
                 }
-                else
-                {
-                    break;   
-                }
+                var choice = Console.ReadLine();
+                Console.Clear();
+                if (!string.Equals(choice, "1")) return;
             }
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             users.Add(user);
             Console.Clear();
             new UserRepository(repositoryUser).WriteUser(user);
         }
-        
+        //mongo end point gets kullan
+        // asp.net core bak çalış
     }
 }

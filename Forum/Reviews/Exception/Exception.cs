@@ -61,4 +61,48 @@
         {
         }
     }
+    public class InvalidRegister : BadRequest
+    {
+        public InvalidRegister() : base(4007, "\nInvalid register! \n" +
+                                              "To make a new register                       : 1 \n" +
+                                              "To return back to main menu                  : (any) ")
+        {
+        }
+    }
+    
+    public class InvalidReview : BadRequest
+    {
+        public InvalidReview() : base(4008, "\nInvalid review input! \n" +
+                                            "To give new input                            : 1 \n" +
+                                            "To return back to main menu                  : (any) ")
+        {
+        }
+    }
+    public class InvalidStat : BadRequest
+    {
+        public InvalidStat() : base(4009, "\nInvalid stat input! \n" +
+                                          "\nEnter new status. \n" +
+                                          "Approved                                     : 1 \n" +
+                                          "Rejected                                     : 2 \n")
+        {
+        }
+    }
+    public class InvalidTitle : BadRequest
+    {
+        public InvalidTitle() : base(4010, "\nInvalid title input! \n")
+        {
+        }
+    }
+    public class InvalidContent : BadRequest
+    {
+        public InvalidContent() : base(4011, "\nInvalid content input! \n")
+        {
+        }
+    }
+    public class InvalidStar : BadRequest
+    {
+        public InvalidStar() : base(4012, "\nInvalid star input! \n")
+        {
+        }
+    }
 }

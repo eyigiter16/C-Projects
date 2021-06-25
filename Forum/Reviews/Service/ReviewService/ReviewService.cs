@@ -6,11 +6,13 @@ using Reviews.Models;
 using Reviews.Mongo;
 using Reviews.Repository;
 using Reviews.Service.ReviewService.Interface;
+using Reviews.Validation;
 
 namespace Reviews.Service.ReviewService
 {
     public class ReviewService : IReviewService
     {
+        private ReviewValidator _validator;
         public void ReadUserReview(List<Review>  reviews, string id)
         {
             var looper = true;
@@ -27,15 +29,13 @@ namespace Reviews.Service.ReviewService
                     looper = false;
                     continue;
                 }
-                else if (string.Equals(choice, "1"))
+                if (string.Equals(choice, "1"))
                 {
                     foreach (var review in reviews.Where(review =>
                         string.Equals(Convert.ToString(review.OperatedBy), id)))
                     {
-                        Console.WriteLine("\nID: " + Convert.ToString(review.Id) + " || Title: " + review.Title +
-                                          " || Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " +
-                                          review.OperatedBy);
+                        WriteReview(review);
+                        
                         exist = true;
                     }
 
@@ -49,19 +49,13 @@ namespace Reviews.Service.ReviewService
                     foreach (var review in reviews.Where(review =>
                         !string.Equals(Convert.ToString(review.OperatedBy), id) && string.Equals(review.Status, "approved")))
                     {
-                        Console.WriteLine("\nID: " + Convert.ToString(review.Id) + " || Title: " + review.Title +
-                                          " || Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " +
-                                          review.OperatedBy);
+                        WriteReview(review);
                         exist = true;
                     }
                     foreach (var review in reviews.Where(review =>
                         string.Equals(Convert.ToString(review.OperatedBy), id)))
                     {
-                        Console.WriteLine("\nID: " + Convert.ToString(review.Id) + " || Title: " + review.Title +
-                                          " || Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " +
-                                          review.OperatedBy);
+                        WriteReview(review);
                         exist = true;
                     }
 
@@ -104,8 +98,7 @@ namespace Reviews.Service.ReviewService
                 var exist = false;
                 foreach (var review in reviews.Where(review => string.Equals(review.Status, "approved")))
                 {
-                    Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " || Content: " + review.Content + " || Star: " +
-                                      review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
+                    WriteReview(review);
                     exist = true;
                 }
 
@@ -141,12 +134,7 @@ namespace Reviews.Service.ReviewService
                     }
                     foreach (var review in reviews)
                     {
-                        Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " || Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
-                        if (string.Equals(review.Status.ToLower(), "rejected"))
-                        {
-                            Console.WriteLine("Reject Reason: " + review.RejectReason);
-                        }
+                        WriteReview(review);
                     }
                 }
                 else if (string.Equals(choice, "5"))
@@ -162,8 +150,7 @@ namespace Reviews.Service.ReviewService
                     }
                     foreach (var review in reviews.Where(review => string.Equals(review.Status, "approved")))
                     {
-                        Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " | Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
+                        WriteReview(review);
                     }
                 }
                 else if (string.Equals(choice, "2"))
@@ -175,8 +162,7 @@ namespace Reviews.Service.ReviewService
                     }
                     foreach (var review in reviews.Where(review => string.Equals(review.Status, "pending")))
                     {
-                        Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " | Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
+                        WriteReview(review);
                     }
                 }
                 else if (string.Equals(choice, "3"))
@@ -188,8 +174,7 @@ namespace Reviews.Service.ReviewService
                     }
                     foreach (var review in reviews.Where(review => string.Equals(review.Status, "rejected")))
                     {
-                        Console.WriteLine("\nID: "+ Convert.ToString(review.Id)+" || Title: " + review.Title + " | Content: " + review.Content + " || Star: " +
-                                          review.Star + " || Status: " + review.Status + " || Operated by: " + review.OperatedBy);
+                        WriteReview(review);
                     }
                 }
                 else
@@ -214,41 +199,43 @@ namespace Reviews.Service.ReviewService
         
         public void CreateReview(List<Review>  reviews, string id, Repository<Review> repositoryReview)
         {
-            
-            var reviewId = Guid.NewGuid();
-            Console.WriteLine("\nEnter new Title:"); 
-            var newTitle = Console.ReadLine(); 
-            Console.WriteLine("\nEnter new Content:"); 
-            var newContent = Console.ReadLine(); 
-            Console.WriteLine("\nEnter new Star (1-5):"); 
-            var newStar = Console.ReadLine();
-            int star;
-            while (true)
-            {
-                var numbers = Enumerable.Range(1, 5).ToList();
-                if (!numbers.Any(x => newStar.EndsWith(x.ToString())) || newStar.Length != 1)
-                {
-                    Console.Clear();
-                    Console.WriteLine("Invalid input for star value. Please enter an integer 1-5. \n");
-                    Console.WriteLine("\nEnter new Star (1-5):"); 
-                    newStar = Console.ReadLine();
-                }
-                else
-                {
-                    star = Convert.ToInt32(newStar);
-                    break;
-                }
-            }
+            _validator = new ReviewValidator();
             var review = new Review
             {
-                Id = reviewId,
-                Title = newTitle,
-                Content = newContent,
-                Star = star,
+                Id = Guid.NewGuid(),
                 Status = "pending",
-                OperatedBy = new Guid(id),
-                RejectReason = null
+                RejectReason = null,
+                OperatedBy = new Guid(id)
             };
+
+            while (true)
+            {
+                Console.WriteLine("\nEnter new Title:"); 
+                review.Title = Console.ReadLine(); 
+                Console.WriteLine("\nEnter new Content:"); 
+                review.Content = Console.ReadLine(); 
+                Console.WriteLine("\nEnter new Star (1-5):"); 
+                var star = Console.ReadLine();
+                if(!string.IsNullOrEmpty(star)) review.Star = Convert.ToInt32(star);
+                var validate = _validator.Validate(review);
+                if (validate.IsValid)
+                {
+                    break;
+                }
+                Console.WriteLine(validate);
+                try
+                {
+                    throw new InvalidReview();
+                }
+                catch (InvalidReview e)
+                {
+                    Console.WriteLine(e.Code+e.Message);
+                }
+                var choice = Console.ReadLine();
+                Console.Clear();
+                if (!string.Equals(choice, "1")) return;
+            }
+            
             reviews.Add(review);
             Console.Clear();
             new ReviewRepository(repositoryReview).WriteReview(review);
@@ -256,18 +243,15 @@ namespace Reviews.Service.ReviewService
 
         public void ChangeStatus(IEnumerable<Review> reviews, Repository<Review> repositoryReview)
         {
+            _validator = new ReviewValidator();
             Console.WriteLine("\nPlease enter the title of the review:");
             var idRejected = Console.ReadLine();
             Console.Clear();
             
             foreach (var review in reviews.Where(review => string.Equals(idRejected, review.Title)))
             {
-                Console.WriteLine("\nID: "+ review.Id +"\nTitle: " + review.Title + "\nContent: " + review.Content + "\nStar: " +
-                                  review.Star + "\nStatus: " + review.Status + "\nOperated by: " + review.OperatedBy);
-                if (string.Equals(review.Status.ToLower(), "rejected"))
-                {
-                    Console.WriteLine("Reject Reason: " + review.RejectReason);
-                }
+                WriteReview(review);
+                
                 Console.WriteLine("\nEnter new status. \n" +
                                   "Approved                                     : 1 \n" +
                                   "Rejected                                     : 2 \n");
@@ -276,28 +260,37 @@ namespace Reviews.Service.ReviewService
                 {
                     if (string.Equals(newStat, "1"))
                     {
-                        newStat = "approved";
+                        review.Status = "approved";
                         break;
                     }
                     if (string.Equals(newStat, "2"))
                     {
-                        newStat = "rejected";
+                        review.Status = "rejected";
+                        while (true)
+                        {
+                            Console.WriteLine("\nEnter reject reason (empty if not rejected):");
+                            review.RejectReason = Console.ReadLine();
+                            var validate = _validator.Validate(review);
+                            if (validate.IsValid)
+                            {
+                                break;
+                            }
+                            Console.Clear();
+                            Console.WriteLine(validate);
+                        }
                         break;
                     }
                     Console.Clear();
-                    Console.WriteLine("Invalid input for stat input. \n");
-                    Console.WriteLine("\nEnter new status. \n" +
-                                      "Approved                                     : 1 \n" +
-                                      "Rejected                                     : 2 \n"); 
+                    try
+                    {
+                        throw new InvalidStat();
+                    }
+                    catch (InvalidStat e)
+                    {
+                        Console.WriteLine(e.Code+e.Message);
+                    }
                     newStat = Console.ReadLine();
                 }
-                if (string.Equals(newStat, "rejected"))
-                {
-                    Console.WriteLine("\nEnter reject reason (empty if not rejected):");
-                    var rejectReason = Console.ReadLine();
-                    review.RejectReason = rejectReason;
-                }
-                review.Status = newStat;
                 Console.Clear();
                 new ReviewRepository(repositoryReview).UpdateReview(review);
             }
@@ -317,15 +310,8 @@ namespace Reviews.Service.ReviewService
                     inLoop = true;
                     if (string.Equals(Convert.ToString(review.OperatedBy), id))
                     {
-                        Console.WriteLine("\nID: " + review.Id + "\nTitle: " + review.Title + "\nContent: " +
-                                          review.Content + "\nStar: " +
-                                          review.Star + "\nStatus: " + review.Status + "\nOperated by: " +
-                                          review.OperatedBy);
-                        if (string.Equals(review.Status.ToLower(), "rejected"))
-                        {
-                            Console.WriteLine("Reject Reason: " + review.RejectReason);
-                        }
-
+                        WriteReview(review);
+                        
                         var exitLoop = false;
                         var changesDone = false;
                         while (!exitLoop)
@@ -339,44 +325,75 @@ namespace Reviews.Service.ReviewService
 
                             if (string.Equals(choiceReview, "1"))
                             {
-                                Console.WriteLine("\nEnter new Title:");
-                                var newTitle = Console.ReadLine();
-                                review.Title = newTitle;
+                                while(true)
+                                {
+                                    Console.WriteLine("\nEnter new Title:");
+                                    review.Title = Console.ReadLine();
+                                    Console.Clear();
+                                    var validate = _validator.Validate(review);
+                                    if (validate.IsValid)
+                                    {
+                                        break;
+                                    }
+                                    Console.WriteLine(validate);
+                                    try
+                                    {
+                                        throw new InvalidTitle();
+                                    }
+                                    catch (InvalidTitle e)
+                                    {
+                                        Console.WriteLine(e.Code + e.Message);
+                                    }
+                                }
                                 changesDone = true;
-                                Console.Clear();
                             }
                             else if (string.Equals(choiceReview, "2"))
                             {
-                                Console.WriteLine("\nEnter new Content:");
-                                var newContent = Console.ReadLine();
-                                review.Content = newContent;
+                                while (true)
+                                {
+                                    Console.WriteLine("\nEnter new Content:");
+                                    review.Content = Console.ReadLine();
+                                    Console.Clear();
+                                    var validate = _validator.Validate(review);
+                                    if (validate.IsValid)
+                                    {
+                                        break;
+                                    }
+                                    Console.WriteLine(validate);
+                                    try
+                                    {
+                                        throw new InvalidContent();
+                                    }
+                                    catch (InvalidContent e)
+                                    {
+                                        Console.WriteLine(e.Code + e.Message);
+                                    }
+                                }
                                 changesDone = true;
-                                Console.Clear();
                             }
                             else if (string.Equals(choiceReview, "3"))
                             {
-                                Console.WriteLine("\nEnter new Star (1-5):");
-                                var newStar = Console.ReadLine();
-                                int star;
-                                while (true)
+                                while(true)
                                 {
-                                    var numbers = Enumerable.Range(1, 5).ToList();
-                                    if (!numbers.Any(x => newStar.EndsWith(x.ToString())) || newStar.Length != 1)
+                                    Console.WriteLine("\nEnter new Star (1-5):");
+                                    var star = Console.ReadLine();
+                                    Console.Clear();
+                                    if (!string.IsNullOrEmpty(star)) review.Star = Convert.ToInt32(star);
+                                    var validate = _validator.Validate(review);
+                                    if (validate.IsValid)
                                     {
-                                        Console.Clear();
-                                        Console.WriteLine(
-                                            "Invalid input for star value. Please enter an integer 1-5. \n");
-                                        Console.WriteLine("\nEnter new Star (1-5):");
-                                        newStar = Console.ReadLine();
-                                    }
-                                    else
-                                    {
-                                        star = Convert.ToInt32(newStar);
                                         break;
                                     }
+                                    Console.WriteLine(validate);
+                                    try
+                                    {
+                                        throw new InvalidStar();
+                                    }
+                                    catch (InvalidStar e)
+                                    {
+                                        Console.WriteLine(e.Code + e.Message);
+                                    }
                                 }
-
-                                review.Star = star;
                                 changesDone = true;
                                 Console.Clear();
                             }
@@ -434,6 +451,17 @@ namespace Reviews.Service.ReviewService
                     Console.WriteLine("\nExiting. ");
                 }
                 break;
+            }
+        }
+        private static void WriteReview(Review review)
+        {
+            Console.WriteLine("\nID: " + review.Id + "\nTitle: " + review.Title + "\nContent: " +
+                              review.Content + "\nStar: " +
+                              review.Star + "\nStatus: " + review.Status + "\nOperated by: " +
+                              review.OperatedBy);
+            if (string.Equals(review.Status.ToLower(), "rejected"))
+            {
+                Console.WriteLine("Reject Reason: " + review.RejectReason);
             }
         }
     }
